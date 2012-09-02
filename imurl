@@ -7,7 +7,7 @@ import urllib
 
 class imgurAlbumGet():
     def getAlbumID(self, url):
-        return url.split("/")[-1][:11]
+        return url.split("/")[-1][:5]
 
     def getAPIResults(self, albumID):
         apiRawData = urllib.urlopen("http://api.imgur.com/2/album/" + albumID + ".json")

@@ -1,0 +1,30 @@
+#!/usr/bin/env python
+
+import json
+import os
+import sys
+import urllib
+
+class imgurAlbumGet():
+    def getAlbumID(self, url):
+        return url.split("/")[-1][:11]
+
+    def getAPIResults(self, albumID):
+        apiRawData = urllib.urlopen("http://api.imgur.com/2/album/" + albumID + ".json")
+        jsonData = json.load(apiRawData)
+        return jsonData
+
+    def getImageURLs(self, apiResults):
+        for result in apiResults["album"]["images"]:
+            yield result["links"]["original"]
+
+def main():
+    try:
+        _, albumID = sys.argv
+    except ValueError:
+        raise SyntaxError("Usage: %s id" % os.path.basename(sys.argv[0]))
+    i = imgurAlbumGet()
+    print "\n".join(i.getImageURLs(i.getAPIResults(i.getAlbumID(albumID))))
+
+if __name__ == "__main__":
+    main()

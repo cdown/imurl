@@ -10,8 +10,7 @@ class imgurAlbumGet():
         return url.split("/")[-1][:5]
 
     def getAPIResults(self, albumID):
-        return json.load(urllib.urlopen("http://api.imgur.com/2/album/%s.json" %
-                                        urllib.quote_plus(albumID)))
+        return json.load(urllib.urlopen("http://api.imgur.com/2/album/%s.json" % urllib.quote_plus(albumID)))
 
     def getImageURLs(self, apiResults):
         return (x["links"]["original"] for x in apiResults["album"]["images"])
@@ -20,4 +19,4 @@ if __name__ == "__main__":
     if len(sys.argv) != 2:
         raise SyntaxError("Usage: %s id" % os.path.basename(sys.argv[0]))
     i = imgurAlbumGet()
-    print "\n".join(i.getImageURLs(i.getAPIResults(i.getAlbumID(albumID))))
+    print "\n".join(i.getImageURLs(i.getAPIResults(i.getAlbumID(sys.argv[1]))))

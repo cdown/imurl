@@ -16,13 +16,8 @@ class imgurAlbumGet():
     def getImageURLs(self, apiResults):
         return (x["links"]["original"] for x in apiResults["album"]["images"])
 
-def main():
-    try:
-        _, albumID = sys.argv
-    except ValueError:
+if __name__ == "__main__":
+    if len(sys.argv) != 2:
         raise SyntaxError("Usage: %s id" % os.path.basename(sys.argv[0]))
     i = imgurAlbumGet()
     print "\n".join(i.getImageURLs(i.getAPIResults(i.getAlbumID(albumID))))
-
-if __name__ == "__main__":
-    main()

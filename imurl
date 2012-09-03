@@ -10,9 +10,8 @@ class imgurAlbumGet():
         return url.split("/")[-1][:5]
 
     def getAPIResults(self, albumID):
-        apiRawData = urllib.urlopen("http://api.imgur.com/2/album/" + albumID + ".json")
-        jsonData = json.load(apiRawData)
-        return jsonData
+        apiRawData = urllib.urlopen("http://api.imgur.com/2/album/%s.json" % urllib.quote_plus(albumID))
+        return json.load(apiRawData)
 
     def getImageURLs(self, apiResults):
         for result in apiResults["album"]["images"]:

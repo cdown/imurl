@@ -14,8 +14,7 @@ class imgurAlbumGet():
         return json.load(apiRawData)
 
     def getImageURLs(self, apiResults):
-        for result in apiResults["album"]["images"]:
-            yield result["links"]["original"]
+        return (x["links"]["original"] for x in apiResults["album"]["images"])
 
 def main():
     try:

@@ -3,17 +3,21 @@
 import json
 import os
 import sys
-import urllib
+import urllib2
 
 class imgurAlbumGet():
     def getAlbumID(self, url):
         return url.split("/")[-1][:5]
 
     def getAPIResults(self, albumID):
-        return json.load(urllib.urlopen("http://api.imgur.com/2/album/%s.json" % urllib.quote(albumID)))
+        opener = urllib2.build_opener()
+        opener.addheaders = [("Authorization", "Client-ID a76b0733b2ba03a")]
+        return json.load(opener.open(
+            "https://api.imgur.com/3/album/%s.json" % urllib2.quote(albumID)
+        ))
 
     def getImageURLs(self, apiResults):
-        return (x["links"]["original"] for x in apiResults["album"]["images"])
+        return (x["link"] for x in apiResults["data"]["images"])
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:

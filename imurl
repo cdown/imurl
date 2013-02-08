@@ -5,22 +5,20 @@ import os
 import sys
 import urllib2
 
-class imgurAlbumGet():
-    def getAlbumID(self, url):
-        return url.split("/")[-1][:5]
+def getAlbumID(url):
+    return url.split("/")[-1][:5]
 
-    def getAPIResults(self, albumID):
-        opener = urllib2.build_opener()
-        opener.addheaders = [("Authorization", "Client-ID a76b0733b2ba03a")]
-        return json.load(opener.open(
-            "https://api.imgur.com/3/album/%s.json" % urllib2.quote(albumID)
-        ))
+def getAPIResults(albumID):
+    opener = urllib2.build_opener()
+    opener.addheaders = [("Authorization", "Client-ID a76b0733b2ba03a")]
+    return json.load(opener.open(
+        "https://api.imgur.com/3/album/%s.json" % urllib2.quote(albumID)
+    ))
 
-    def getImageURLs(self, apiResults):
-        return (x["link"] for x in apiResults["data"]["images"])
+def getImageURLs(apiResults):
+    return (x["link"] for x in apiResults["data"]["images"])
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
         raise SyntaxError("Usage: %s id" % os.path.basename(sys.argv[0]))
-    i = imgurAlbumGet()
-    print "\n".join(i.getImageURLs(i.getAPIResults(i.getAlbumID(sys.argv[1]))))
+    print "\n".join(getImageURLs(getAPIResults(getAlbumID(sys.argv[1]))))

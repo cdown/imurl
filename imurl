@@ -1,24 +1,34 @@
 #!/usr/bin/env python
 
-import json
 import os
 import sys
-import urllib2
+import requests
 
-def getAlbumID(url):
+
+def album_id_from_url(url):
     return url.split("/")[-1][:5]
 
-def getAPIResults(albumID):
-    opener = urllib2.build_opener()
-    opener.addheaders = [("Authorization", "Client-ID a76b0733b2ba03a")]
-    return json.load(opener.open(
-        "https://api.imgur.com/3/album/%s.json" % urllib2.quote(albumID)
-    ))
 
-def getImageURLs(apiResults):
-    return (x["link"] for x in apiResults["data"]["images"])
+def query_api(album_id):
+    r_handle = requests.get(
+        "https://api.imgur.com/3/album/%s.json" % album_id,
+        headers={
+            "Authorization": "Client-ID a76b0733b2ba03a"
+        },
+    )
+    return r_handle.json()
+
+
+def filter_image_urls(api_response):
+    return (x["link"] for x in api_response["data"]["images"])
+
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
         raise SyntaxError("Usage: %s id" % os.path.basename(sys.argv[0]))
-    print "\n".join(getImageURLs(getAPIResults(getAlbumID(sys.argv[1]))))
+
+    album_id = album_id_from_url(sys.argv[1])
+    api_response = query_api(album_id)
+    urls = filter_image_urls(api_response)
+
+    print("\n".join(urls))

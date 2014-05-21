@@ -13,7 +13,12 @@ except ImportError:  # Python 2 fallback
 
 def album_id_from_url(url):
     url_parts = url.split("/")
-    album_id_index = url_parts.index("a") + 1
+
+    try:
+        album_id_index = url_parts.index("a") + 1
+    except ValueError:  # No "a" in the URL, maybe this is just bare
+        return url
+
     return url_parts[album_id_index][:5]
 
 

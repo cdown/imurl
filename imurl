@@ -12,7 +12,9 @@ except ImportError:  # Python 2 fallback
 
 
 def album_id_from_url(url):
-    return url.split("/")[-1][:5]
+    url_parts = url.split("/")
+    album_id_index = url_parts.index("a") + 1
+    return url_parts[album_id_index][:5]
 
 
 def query_api(album_id):

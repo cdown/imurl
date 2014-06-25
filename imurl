@@ -49,13 +49,16 @@ if __name__ == "__main__":
     filename_format = "%%0%dd-%%s" % padding
 
     for i, url in enumerate(urls):
-        threads.append(threading.Thread(
-            target=urlretrieve,
-            kwargs={
-                "url": url,
-                "filename": filename_format % (i, url.rsplit("/", 1)[-1]),
-            },
-        ))
+        filename = filename_format % (i, url.rsplit("/", 1)[-1])
+
+        if not os.path.isfile(filename):
+            threads.append(threading.Thread(
+                target=urlretrieve,
+                kwargs={
+                    "url": url,
+                    "filename": filename,
+                },
+            ))
 
     for thread in threads:
         thread.start()

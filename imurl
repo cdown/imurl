@@ -45,7 +45,7 @@ if __name__ == "__main__":
     urls = list(filter_image_urls(api_response))
 
     threads = []
-    padding = len(str(len(urls)))
+    padding = len(str(len(urls) - 1))
     filename_format = "%%0%dd-%%s" % padding
 
     for i, url in enumerate(urls):
